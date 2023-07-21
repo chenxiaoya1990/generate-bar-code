@@ -1,5 +1,4 @@
 # generate-bar-code
-This project is a barcode generator that allows users to generate barcodes and store them in Redis with an expiration time.  It uses the Code 128 barcode format and provides a simple API to interact with the barcode generation and status update.
 
 # Project Title
 Barcode Generator with Redis
@@ -13,7 +12,7 @@ It uses the Code 128 barcode format and provides a simple API to interact with t
 * com.google.zxing
 
 ### Features
-* Generate a new barcode for a given user ID and store it in Redis.
+* Generate a new barcode for a given user ID and store it in Redis and the barcode will be expired after 7min or after being used.
 * Retrieve the barcode image associated with a user ID in Base64 format.
 * Update the status of a barcode to "used" based on the provided barcode value. Expired barcodes will also be set to "used".
 * Check if a barcode associated with a user ID is still valid (not expired).
@@ -28,7 +27,7 @@ To use this barcode generator, follow these steps:
 
 * 1.Install and configure Redis on your local machine or use AWS Elasticache Redis.
 * 2.Clone this repository to your local machine.
-* 3.Set up your Spring Boot project with Redis configuration in application.yml.
+* 3.Set up your Spring Boot project with Redis configuration in application.properties.
 * 4.Build and run the Spring Boot application.properties
 
 
