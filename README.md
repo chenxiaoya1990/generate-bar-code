@@ -35,7 +35,7 @@ To use this barcode generator, follow these steps:
   
 * GET /is-barcode-valid/{barcodeCode}: Checks if the barcode associated with the given barcode code is still valid (not expired). Returns true if the barcode is valid, false otherwise.
 
-### Redis Memory Usage estimation Part
+## Redis Memory Usage estimation Part
 
 The purpose of this part is to estimate the required AWS Elasticache Redis capacity to handle the storage and retrieval of barcodes during a weekday's peak time.
 
