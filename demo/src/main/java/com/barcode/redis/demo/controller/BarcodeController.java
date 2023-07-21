@@ -1,64 +1,72 @@
 package com.barcode.redis.demo.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.barcode.redis.demo.dto.BarcodeDTO;
 import com.barcode.redis.demo.service.BarcodeService;
 
 @RestController
 public class BarcodeController {
 
-	private final BarcodeService barcodeService;
+    private final BarcodeService barcodeService;
 
-	@Autowired
-	public BarcodeController(BarcodeService barcodeService) {
-		this.barcodeService = barcodeService;
-	}
+    @Autowired
+    public BarcodeController(BarcodeService barcodeService) {
+        this.barcodeService = barcodeService;
+    }
 
-	/**
-	 * Generates a new barcode for the given userId and returns the generated barcode value.
-	 *
-	 * @param userId The unique identifier of the user.
-	 * @return The generated barcode value.
-	 */
-	@GetMapping("/generate-barcode/{userId}")
-	public String generateBarcode(@PathVariable String userId) {
-		return barcodeService.generateBarcode(userId);
-	}
+    /**
+     * Generates a new barcode for the given userId and returns the generated BarcodeDTO containing the barcode value
+     * and expiration timestamp.
+     *
+     * @param request A request object containing the user ID in JSON format.
+     * @return The generated BarcodeDTO containing the barcode value and expiration timestamp.
+     */
+    @PostMapping("/generate-barcode")
+    public BarcodeDTO generateBarcode(@RequestBody Map<String, String> request) {
+        String userId = request.get("userId");
+        return barcodeService.generateBarcode(userId);
+    }
 
-	/**
-	 * Retrieves the barcode image associated with the given userId in Base64 format.
-	 *
-	 * @param userId The unique identifier of the user.
-	 * @return The Base64 encoded barcode image.
-	 */
-	@GetMapping("/get-barcode/{userId}")
-	public String getBarcode(@PathVariable String userId) {
-		String barcodeBase64 = barcodeService.getBarcodeByUserId(userId);
-		return "<img src='data:image/png;base64," + barcodeBase64 + "'/>";
-	}
+    /**
+     * Retrieves the barcode value associated with the given barcodeCode.
+     *
+     * @param code The unique identifier of the barcode.
+     * @return The barcode value.
+     */
+    @GetMapping("/get-barcode/{code}")
+    public String getBarcode(@PathVariable String code) {
+        return barcodeService.getBarcodeByCode(code);
+    }
 
-	/**
-	 * Updates the status of a barcode to "used" based on the provided userID's barcode value.
-	 * If the barcode is expired, it will still be set to "used".
-	 *
-	 * @param barcode The barcode value to update the status for.
-	 */
-	@GetMapping("/update-barcode-status/{userId}")
-	public void updateBarcodeStatus(@PathVariable String userId) {
-		barcodeService.updateBarcodeStatus(userId);
-	}
+    /**
+     * Marks a barcode as "used" based on the provided barcode code.
+     * If the barcode is expired, it will still be set to "used".
+     *
+     * @param request A request object containing the barcode code in JSON format.
+     */
+    @PostMapping("/update-barcode-status")
+    public void updateBarcodeStatus(@RequestBody Map<String, String> request) {
+        String barcodeCode = request.get("code");
+        barcodeService.markBarcodeAsUsed(barcodeCode);
+    }
 
-	/**
-	 * Checks if the barcode associated with the given userId is still valid.
-	 *
-	 * @param userId The unique identifier of the user.
-	 * @return True if the barcode is valid (not expired), false otherwise.
-	 */
-	@GetMapping("/is-barcode-valid/{userId}")
-	public boolean isBarcodeValid(@PathVariable String userId) {
-		return barcodeService.isBarcodeValid(userId);
-	}
+    /**
+     * Checks if the barcode associated with the given barcode code is still valid.
+     * A barcode is considered valid if it has not expired and has not been marked as "used".
+     *
+     * @param code The unique identifier of the barcode.
+     * @return True if the barcode is valid (not expired and not marked as "used"), false otherwise.
+     */
+    @GetMapping("/is-barcode-valid/{code}")
+    public boolean isBarcodeValid(@PathVariable String code) {
+        return barcodeService.isBarcodeValid(code);
+    }
 }
