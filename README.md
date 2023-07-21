@@ -1,6 +1,6 @@
 # generate-bar-code
 
-# Project Title
+## Project Title
 Barcode Generator with Redis
 
 ## Description
