@@ -25,7 +25,7 @@ It uses the Code 128 barcode format and provides a simple API to interact with t
 ## Getting Started
 To use this barcode generator, follow these steps:
 
-* 1.Install and configure Redis on your local machine or use AWS Elasticache Redis.
+* 1.Install and configure Redis on your local machine (https://redis.io/download/) or use AWS Elasticache Redis.
 * 2.Clone this repository to your local machine.
 * 3.Set up your Spring Boot project with Redis configuration in application.properties.
 * 4.Build and run the Spring Boot application.properties
