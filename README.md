@@ -22,7 +22,6 @@ It uses the Code 128 barcode format and provides a simple API to interact with t
 * Java Spring Boot for the backend application.
 * Redis for storing and managing barcode data.
 * Google ZXing library for generating Code 128 barcodes.
-* AWS Elasticache Redis for high-performance caching.
 
 ## Getting Started
 To use this barcode generator, follow these steps:
@@ -30,7 +29,7 @@ To use this barcode generator, follow these steps:
 * 1.Install and configure Redis on your local machine or use AWS Elasticache Redis.
 * 2.Clone this repository to your local machine.
 * 3.Set up your Spring Boot project with Redis configuration in application.yml.
-* 4.Build and run the Spring Boot application.
+* 4.Build and run the Spring Boot application.properties
 
 
 ### API Endpoints
@@ -38,7 +37,7 @@ To use this barcode generator, follow these steps:
 
 * GET /get-barcode/{userId}: Retrieves the barcode image associated with the given user ID in Base64 format.
 
-* GET /update-barcode-status/{barcode}: Updates the status of a barcode to "used" based on the provided barcode value. If the barcode is expired, it will still be set to "used".
+* GET /update-barcode-status/{userId}: Updates the status of a barcode to "used" based on the provided barcode value. If the barcode is expired, it will still be set to "used".
 
 * GET /is-barcode-valid/{userId}: Checks if the barcode associated with the given user ID is still valid (not expired). Returns true if the barcode is valid, false otherwise.
 
