@@ -35,7 +35,24 @@ To use this barcode generator, follow these steps:
   
 * GET /is-barcode-valid/{barcodeCode}: Checks if the barcode associated with the given barcode code is still valid (not expired). Returns true if the barcode is valid, false otherwise.
 
+### Redis Memory Usage estimation Part
 
+The purpose of this part is to estimate the required AWS Elasticache Redis capacity to handle the storage and retrieval of barcodes during a weekday's peak time.
+
+1. The average size of the generated barcodes is as follows:
+
+   - Barcode: 36 bytes
+
+2. Since the peak period processes around 400 requests per second, the number of requests per 7 minutes would be:
+
+   400 requests/second * 60 seconds/minute * 7 minutes = 168,000 requests/hour
+
+3. Calculate the amount of data to be stored per hour:
+
+   (168,000 requests/hour) * (36 bytes/request) = 6,048,000 bytes/hour = 5,906.25 KB/hour = 5.767 GB/hour
+
+4. To conclude, it is recommended to use AWS Elasticache Redis with a capacity of at least 5.8 GB to handle the storage and retrieval of barcodes during the peak time.
+  
 ## Authors
 xiaoya
 
