@@ -5,22 +5,17 @@ RESTful API: Barcode Generator with Redis
 
 ## Description
 This project is a barcode generator that allows users to generate barcodes and store them in Redis with an expiration time. 
-It uses the Code 128 barcode format and provides a simple RESTful API to interact with the barcode generation and status update.
-
-### Dependencies
-
-* com.google.zxing
+It uses the Code 128 barcode format and provides a simple RESTful API to interact with barcode generation and status updates.
 
 ### Features
-* Generate a new barcode for a given user ID and store it in Redis and the barcode will be expired after 7min or after being used.
-* Retrieve the barcode image associated with a user ID in Base64 format.
+* Generate a new barcode for a given user ID and store it in Redis. The barcode will be automatically expired after 7 minutes or after being used.
+* Retrieve the barcode.
 * Update the status of a barcode to "used" based on the provided barcode value. Expired barcodes will also be set to "used".
 * Check if a barcode associated with a user ID is still valid (not expired).
 
 ### Technologies Used
 * Java Spring Boot for the backend application.
 * Redis for storing and managing barcode data.
-* Google ZXing library for generating Code 128 barcodes.
 
 ## Getting Started
 To use this barcode generator, follow these steps:
@@ -32,13 +27,13 @@ To use this barcode generator, follow these steps:
 
 
 ### API Endpoints
-* GET /generate-barcode/{userId}: Generates a new barcode for the given user ID and stores it in Redis. Returns the generated barcode value.
-
-* GET /get-barcode/{userId}: Retrieves the barcode image associated with the given user ID in Base64 format.
-
-* GET /update-barcode-status/{userId}: Updates the status of a barcode to "used" based on the provided barcode value. If the barcode is expired, it will still be set to "used".
-
-* GET /is-barcode-valid/{userId}: Checks if the barcode associated with the given user ID is still valid (not expired). Returns true if the barcode is valid, false otherwise.
+* POST /generate-barcode: Generates a new barcode for the given user ID and stores it in Redis. Returns the generated barcode value and expiration timestamp in JSON format.
+  
+* GET /get-barcode/{barcodeCode}: Retrieves the barcode image associated with the given barcode code in Base64 format.
+  
+* POST /update-barcode-status: Updates the status of a barcode to "used" based on the provided barcode code. If the barcode is expired, it will still be set to "used".
+  
+* GET /is-barcode-valid/{barcodeCode}: Checks if the barcode associated with the given barcode code is still valid (not expired). Returns true if the barcode is valid, false otherwise.
 
 
 ## Authors
