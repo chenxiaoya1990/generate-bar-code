@@ -1,16 +1,20 @@
 package com.barcode.redis.demo.service;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 
@@ -34,26 +38,50 @@ public class BarcodeService {
 	 * @return The generated barcode value.
 	 */
 	public String generateBarcode(String userId) {
-		String barcodeValue = UUID.randomUUID().toString();
-		String key = BARCODE_PREFIX + userId;
+		   // Generate a random 24-digit barcode value
+	    String barcodeValue = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 24);
+	    String key = BARCODE_PREFIX + userId;
 
-		// Generate the barcode image in PNG format.
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		Code128Writer barcodeWriter = new Code128Writer();
-		BitMatrix bitMatrix = barcodeWriter.encode(barcodeValue, BarcodeFormat.CODE_128, 200, 80);
-		try {
-			MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    // Generate the barcode image in PNG format.
+	    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	    Code128Writer barcodeWriter = new Code128Writer();
+	    BitMatrix bitMatrix = barcodeWriter.encode(barcodeValue, BarcodeFormat.CODE_128, 200, 80);
 
-		// Convert the barcode image to a Base64 encoded string.
-		String barcodeBase64 = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+	    // Create a new BufferedImage with enough space to include the barcode and the generated number below it
+	    BufferedImage barcodeImage = new BufferedImage(200, 120, BufferedImage.TYPE_INT_RGB);
+	    Graphics2D graphics = barcodeImage.createGraphics();
+	    graphics.setColor(java.awt.Color.WHITE);
+	    graphics.fillRect(0, 0, 200, 120);
 
-		// Link the barcode to the userID and set the expiration time for the barcode.
-		redisTemplate.opsForValue().set(key, barcodeBase64, EXPIRATION_SECONDS, TimeUnit.SECONDS);
+	    // Draw the barcode onto the new image
+	    graphics.setColor(java.awt.Color.BLACK);
+	    for (int i = 0; i < 200; i++) {
+	        for (int j = 0; j < 80; j++) {
+	            if (bitMatrix.get(i, j)) {
+	                graphics.fillRect(i, j, 1, 1);
+	            }
+	        }
+	    }
 
-		return barcodeValue;
+	    // Draw the generated barcode value below the barcode
+	    Font font = new Font("Arial", Font.PLAIN, 14);
+	    graphics.setFont(font);
+	    graphics.drawString(barcodeValue, 10, 100); 
+
+	    try {
+	        // Write the image to the ByteArrayOutputStream in PNG format
+	        ImageIO.write(barcodeImage, "png", outputStream);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    // Convert the barcode image to a Base64 encoded string
+	    String barcodeBase64 = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+
+	    // Link the barcode to the generated barcode value and set the expiration time for the barcode
+	    redisTemplate.opsForValue().set(key, barcodeBase64, EXPIRATION_SECONDS, TimeUnit.SECONDS);
+
+	    return barcodeValue;
 	}
 
 	/**
