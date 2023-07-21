@@ -1,11 +1,11 @@
 # generate-bar-code
 
 ## Project Title
-Barcode Generator with Redis
+RESTful API: Barcode Generator with Redis
 
 ## Description
 This project is a barcode generator that allows users to generate barcodes and store them in Redis with an expiration time. 
-It uses the Code 128 barcode format and provides a simple API to interact with the barcode generation and status update.
+It uses the Code 128 barcode format and provides a simple RESTful API to interact with the barcode generation and status update.
 
 ### Dependencies
 
