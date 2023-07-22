@@ -29,7 +29,7 @@ public class BarcodeService {
      * @return The DTO class containing the generated barcode value and expiration timestamp.
      */
     public BarcodeDTO generateBarcode(String userId) {
-        String barcode = UUID.randomUUID().toString();
+        String barcode =  UUID.randomUUID().toString().replaceAll("-", "").substring(0, 24);
         String key = BARCODE_PREFIX + barcode;
   
         // Calculate the total expiration time, including the buffer.
@@ -46,7 +46,6 @@ public class BarcodeService {
         BarcodeDTO barcodeDTO = new BarcodeDTO();
         barcodeDTO.setCode(barcode);
         barcodeDTO.setExpireAt(expireAtTimestamp);
-
         return barcodeDTO;
     }
 
