@@ -49,7 +49,7 @@ The purpose of this part is to estimate the required AWS Elasticache Redis capac
 
 3. Calculate the amount of data to be stored per hour:
 
-   (168,000 requests) * (165 bytes/request) = 28,560,000 bytes = 27,890.625 KB = 27.237 GB
+   (168,000 requests) * (170 bytes/request) = 28,560,000 bytes = 27,890.625 KB = 27.237 GB
 
 4. To conclude, it is recommended to set AWS Elasticache Redis with a memory of at least 27.3 GB to handle the storage and retrieval of barcodes during the peak time.
   
