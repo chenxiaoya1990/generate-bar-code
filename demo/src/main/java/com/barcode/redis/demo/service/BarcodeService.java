@@ -36,10 +36,13 @@ public class BarcodeService {
 		
 	    // Generate the barcode by combining the user's hash code with a random long value,
 	    // and make it 24 characters long.
-		String barcode = StringUtils.rightPad(
-				String.valueOf(userId.hashCode() & Integer.MAX_VALUE)
-						+ String.valueOf(randomCode.nextLong() & Long.MAX_VALUE),
-				24, "0").substring(0, 24);
+		 long currentTimestamp = System.currentTimeMillis();
+
+		    String barcode = StringUtils.rightPad(
+		            String.valueOf(userId.hashCode() & Integer.MAX_VALUE)
+		                    + String.valueOf(randomCode.nextLong() & Long.MAX_VALUE)
+		                    + String.valueOf(currentTimestamp),
+		            24, "0").substring(0, 24);
 
 		String key = BARCODE_PREFIX + barcode;
 
